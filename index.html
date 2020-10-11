@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Blogging app</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <div x-data="loadBlogs()" x-init="fetchBlogs()">
+        <div class="container">
+            <template x-for="blog in blogs">
+                <div id="content">
+                    <h1 x-text="blog.fields.title"></h1>
+                    <p x-text="blog.fields.brief">
+                    </p>
+                    <a x-on:click="show(blog.sys.id)">Read more</a>
+                    <p x-text="blog.fields.date"></p>
+                    <hr>
+                </div>
+            </template>
+        </div>
+    </div>
+    <script>
+        function loadBlogs() {
+            return {
+                blogs: [],
+                content: '',
+                fetchBlogs() {
+                    var client = contentful.createClient({
+                        space: "javd6558yxhq",
+                        accessToken: "vcS-faGqokwWJeNtZumFgkRTvrvc_CuuIHiJdwW72bs"
+                    });
+                    client.getEntries().then(entries => {
+                        this.blogs = entries.items
+                    })
+                },
+                show(blog) {
+                    window.location = 'description.html?id=' + blog;
+
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</body>
+
+
+</html>
